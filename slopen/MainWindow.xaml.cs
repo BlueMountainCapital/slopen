@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,8 +21,27 @@ namespace SlnOpener
     /// </summary>
     public partial class MainWindow : Window
     {
+        private string RootPath = @"e:\source\rlee_BC323_bmc\src";
+
         public MainWindow()
         {
+            var args = Environment.GetCommandLineArgs();
+            var rootPath = args.Skip(1).FirstOrDefault();
+            var refresh = args.Skip(2).Contains("refresh");
+            if (rootPath == null)
+                rootPath = RootPath;
+
+            try
+            {
+                if (refresh)
+                    Properties.Settings.Default.RefreshFileCache(rootPath);
+                DataContext = new SolutionsViewModel(rootPath);
+            }
+            catch(DirectoryNotFoundException exception)
+            {
+                MessageBox.Show("Error: " + exception.ToString());
+            }
+
             InitializeComponent();
 
             Loaded += (s, e) =>

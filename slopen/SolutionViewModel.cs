@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using SlnOpener.Properties;
 
 namespace SlnOpener
 {
@@ -63,16 +64,17 @@ namespace SlnOpener
 
     public class SolutionsViewModel : ViewModelBase
     {
-        private const string InitialPath = @"c:\src";
+        public string RootPath { get; set; }
 
         private readonly ObservableCollection<SolutionViewModel> _solutions;
         private readonly List<SolutionViewModel> _allSolutions;
 
-        public SolutionsViewModel()
+        public SolutionsViewModel(string rootPath)
         {
+            RootPath = rootPath;
             _solutions = new ObservableCollection<SolutionViewModel>();
 
-            _allSolutions = Directory.GetFiles(InitialPath, "*.sln", SearchOption.AllDirectories)
+            _allSolutions = Properties.Settings.Default.GetFiles(RootPath, "*.sln")
                 .Select(f => new SolutionViewModel(f))
                 .OrderBy(s => s.Name)
                 .ToList();
