@@ -1,0 +1,28 @@
+﻿<Window x:Class="SlnOpener.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:SlnOpener"
+        Title="MainWindow" Height="500" Width="300">
+    <Window.DataContext>
+        <local:SolutionsViewModel />
+    </Window.DataContext>
+    <Grid Margin="0,0,0,0">
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="272"
+                 x:Name="SearchBox" AcceptsReturn="False"
+                 Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding OpenCommand}" />
+                <KeyBinding Key="Down" Command="{Binding FocusCommand}" CommandParameter="{Binding ElementName=ResultsBox}" />
+                <KeyBinding Key="Escape" Command="{Binding ClearSearchCommand}" />
+            </TextBox.InputBindings>
+        </TextBox>
+        <ListBox HorizontalAlignment="Left" Height="422" Margin="10,38,0,0" VerticalAlignment="Top" Width="272"
+                 x:Name="ResultsBox"
+                 ItemsSource="{Binding Path=Solutions}" DisplayMemberPath="Name" SelectedIndex="{Binding Path=SelectedSolution}">
+            <ListBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding OpenCommand}" />
+                <KeyBinding Key="Escape" Command="{Binding FocusCommand}" CommandParameter="{Binding ElementName=SearchBox}" />
+            </ListBox.InputBindings>
+        </ListBox>
+    </Grid>
+</Window>
